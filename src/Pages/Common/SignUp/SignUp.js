@@ -18,6 +18,7 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
   const [signupData, setsignupData] = useState("");
+  const [createdUserEmail, setCreatedUserEmail] = useState("");
   const imgbbApi = process.env.REACT_APP_imgbbApi;
   const handleSignup = (signupData) => {
     setLoading(true);
@@ -38,15 +39,34 @@ const SignUp = () => {
 
             updateName(signupData.name, imageData.data.url).then(() => {
               setUser({ ...user, displayName: signupData.name, photoURL });
-
-              toast.success(`Hello, ${user.displayName}. Signup Successed`);
-              const userData = {
-                userName: signupData.name,
-                userEmail: signupData.email,
-                photoURL: photoURL,
-                userRole: signupData.userRole,
+              const currentUser = {
+                email: user.email,
               };
-              console.log(userData);
+              // const userData = {
+              //   userName: signupData.name,
+              //   userEmail: signupData.email,
+              //   photoURL: photoURL,
+              //   userRole: signupData.userRole,
+              // };
+              fetch("http://localhost:5000/jwt", {
+                method: "POST",
+                headers: {
+                  "content-type": "application/json",
+                },
+                body: JSON.stringify(currentUser),
+              })
+                .then((res) => res.json())
+                .then((data) => {
+                  localStorage.setItem("bookroy-token", data.token);
+                });
+              saveUser(
+                signupData.name,
+                signupData.email,
+                photoURL,
+                signupData.userRole
+              );
+              toast.success(`Hello, ${user.displayName}. Signup Successed`);
+
               setLoading(false);
               navigate(from, { replace: true });
             });
@@ -59,19 +79,49 @@ const SignUp = () => {
         navigate(from, { replace: true });
       });
   };
+  const saveUser = (userName, userEmail, photoURL, userRole) => {
+    const user = { userName, userEmail, photoURL, userRole };
+    fetch("http://localhost:5000/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCreatedUserEmail(userEmail);
+      });
+  };
   const provider = new GoogleAuthProvider();
   const handelGoogleLogin = () => {
     googleLogin(provider)
       .then((result) => {
         const user = result.user;
-        toast.success(`Hello, ${user.displayName}. Signup Successed`);
-        const userData = {
-          userName: user.displayName,
-          userEmail: user?.email,
-          photoURL: user?.photoURL,
-          userRole: "buyer",
+        const currentUser = {
+          email: user.email,
         };
-        console.log(userData);
+        fetch("http://localhost:5000/jwt", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(currentUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            localStorage.setItem("bookroy-token", data.token);
+          });
+        saveUser(user.displayName, user.email, user.photoURL, "buyer");
+        navigate(from, { replace: true });
+        toast.success(`Hello, ${user.displayName}. Signup Successed`);
+        // const userData = {
+        //   userName: user.displayName,
+        //   userEmail: user?.email,
+        //   photoURL: user?.photoURL,
+        //   userRole: "buyer",
+        // };
+
         setLoading(false);
         navigate(from, { replace: true });
       })
