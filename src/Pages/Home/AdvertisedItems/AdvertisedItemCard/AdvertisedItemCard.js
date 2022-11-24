@@ -37,7 +37,7 @@ const AdvertisedItemCard = ({ advertisedItem }) => {
               <p>{description}</p>
             )}
             <div className="card-actions justify-start">
-              <Link to={`/listing/${id}`}>
+              <Link to={`/advertisement/${id}`}>
                 <Button>Details</Button>
               </Link>
             </div>

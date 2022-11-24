@@ -48,13 +48,16 @@ const SignUp = () => {
               //   photoURL: photoURL,
               //   userRole: signupData.userRole,
               // };
-              fetch("http://localhost:5000/jwt", {
-                method: "POST",
-                headers: {
-                  "content-type": "application/json",
-                },
-                body: JSON.stringify(currentUser),
-              })
+              fetch(
+                "https://bookroy-book-resale-market-server.vercel.app/jwt",
+                {
+                  method: "POST",
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                  body: JSON.stringify(currentUser),
+                }
+              )
                 .then((res) => res.json())
                 .then((data) => {
                   localStorage.setItem("bookroy-token", data.token);
@@ -81,7 +84,7 @@ const SignUp = () => {
   };
   const saveUser = (userName, userEmail, photoURL, userRole) => {
     const user = { userName, userEmail, photoURL, userRole };
-    fetch("http://localhost:5000/users", {
+    fetch("https://bookroy-book-resale-market-server.vercel.app/users", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -101,7 +104,7 @@ const SignUp = () => {
         const currentUser = {
           email: user.email,
         };
-        fetch("http://localhost:5000/jwt", {
+        fetch("https://bookroy-book-resale-market-server.vercel.app/jwt", {
           method: "POST",
           headers: {
             "content-type": "application/json",
