@@ -6,9 +6,11 @@ import ConfirmationModal from "../../../Common/Modal/ConfirmationModal/Confirmat
 import { format, parseISO } from "date-fns";
 const ManageProducts = () => {
   const [deletingProduct, setDeletingProduct] = useState(null);
-  const { user } = useContext(AuthContext);
+  const [promote, setPromote] = useState(null);
+  const { user, logOut } = useContext(AuthContext);
   const closeModal = () => {
     setDeletingProduct(null);
+    setPromote(null);
   };
   const handleDeleteProduct = (product) => {
     fetch(`http://localhost:5000/product/${product._id}`, {
@@ -42,16 +44,33 @@ const ManageProducts = () => {
           }
         );
         const data = await res.json();
+        if (data.status === 401 || data.status === 403) {
+          return logOut();
+        }
         return data;
       } catch (error) {}
     },
   });
-
+  const setPromoteProduct = (id) => {
+    fetch(`http://localhost:5000/product/${id}`, {
+      method: "PUT",
+      headers: {
+        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount > 0) {
+          toast.success("Product Addded To Advertised List ");
+          refetch();
+        }
+      });
+  };
   return (
     <div>
       <h2 className="text-3xl my-4 text-center">
         Manage Products:{" "}
-        {products?.length < 1 ? <>No product Yet</> : <>products?.length</>}
+        {products?.length < 1 ? <>No product Yet</> : <>{products?.length}</>}
       </h2>
       <div className="overflow-x-auto">
         <table className="table w-full">
@@ -90,11 +109,11 @@ const ManageProducts = () => {
                   </label>
                 </td>
                 <td>
-                  {product?.productStatus === "sold" ? (
-                    <p>Already Sold</p>
+                  {product?.isAdvertise === true ? (
+                    <p>Promoted</p>
                   ) : (
                     <label
-                      onClick={() => setDeletingProduct(product)}
+                      onClick={() => setPromote(product._id)}
                       htmlFor="confirmation-modal"
                       className="btn btn-sm btn-error"
                     >
@@ -110,10 +129,20 @@ const ManageProducts = () => {
       {deletingProduct && (
         <ConfirmationModal
           title={`Are you sure you want to delete?`}
-          message={`If you delete ${deletingProduct.ProductName}. It cannot be undone.`}
+          message={`If you delete? It cannot be undone.`}
           successAction={handleDeleteProduct}
           successButtonName="Delete"
           modalData={deletingProduct}
+          closeModal={closeModal}
+        ></ConfirmationModal>
+      )}
+      {promote && (
+        <ConfirmationModal
+          title={`Are you sure you want to Promote?`}
+          message={`If you promote. It will add to advertise`}
+          successAction={setPromoteProduct}
+          successButtonName="Promote"
+          modalData={promote}
           closeModal={closeModal}
         ></ConfirmationModal>
       )}

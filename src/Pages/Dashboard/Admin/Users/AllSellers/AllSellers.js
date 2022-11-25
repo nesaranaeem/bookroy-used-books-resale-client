@@ -1,10 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../../../contexts/AuthProvider/AuthProvider";
 import { Helmet } from "react-helmet";
+import ConfirmationModal from "../../../../Common/Modal/ConfirmationModal/ConfirmationModal";
 const AllSellers = () => {
   const { logOut } = useContext(AuthContext);
+  const [deletingSeller, setDeletingSeller] = useState(null);
+  const closeModal = () => {
+    setDeletingSeller(null);
+  };
   const { data: sellers = [], refetch } = useQuery({
     queryKey: ["sellers"],
     queryFn: async () => {
@@ -65,12 +70,13 @@ const AllSellers = () => {
                   <td>{seller.userName}</td>
                   <td>{seller.userEmail}</td>
                   <td>
-                    <button
+                    <label
                       className="btn btn-xs btn-error"
-                      onClick={() => handleDeleteSeller(seller._id)}
+                      onClick={() => setDeletingSeller(seller._id)}
+                      htmlFor="confirmation-modal"
                     >
                       Delete Seller
-                    </button>
+                    </label>
                   </td>
                   <td>{seller.userRole}</td>
                 </tr>
@@ -81,6 +87,17 @@ const AllSellers = () => {
           <p className="text-center font-bold">No Seller Yet</p>
         )}
       </div>
+
+      {deletingSeller && (
+        <ConfirmationModal
+          title={`Are you sure you want to delete this seller?`}
+          message={`If you delete? It cannot be undone.`}
+          successAction={handleDeleteSeller}
+          successButtonName="Delete"
+          modalData={deletingSeller}
+          closeModal={closeModal}
+        ></ConfirmationModal>
+      )}
     </div>
   );
 };

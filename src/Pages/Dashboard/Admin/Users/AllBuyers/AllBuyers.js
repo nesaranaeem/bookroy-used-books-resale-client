@@ -1,10 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../../../contexts/AuthProvider/AuthProvider";
 import { Helmet } from "react-helmet";
+import ConfirmationModal from "../../../../Common/Modal/ConfirmationModal/ConfirmationModal";
 const AllBuyers = () => {
   const { logOut } = useContext(AuthContext);
+  const [deletingBuyer, setDeletingBuyer] = useState(null);
+  const closeModal = () => {
+    setDeletingBuyer(null);
+  };
   const { data: buyers = [], refetch } = useQuery({
     queryKey: ["buyers"],
     queryFn: async () => {
@@ -17,22 +22,19 @@ const AllBuyers = () => {
     },
   });
   const handleDeleteBuyer = (id) => {
-    const proceed = window.confirm(`are you sure you want to remove?`);
-    if (proceed) {
-      fetch(`http://localhost:5000/user/${id}`, {
-        method: "DELETE",
-        headers: {
-          authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.deletedCount > 0) {
-            toast.success("Deleted successful.");
-            refetch();
-          }
-        });
-    }
+    fetch(`http://localhost:5000/user/${id}`, {
+      method: "DELETE",
+      headers: {
+        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount > 0) {
+          toast.success("Deleted successful.");
+          refetch();
+        }
+      });
   };
 
   return (
@@ -65,12 +67,13 @@ const AllBuyers = () => {
                   <td>{buyer.userName}</td>
                   <td>{buyer.userEmail}</td>
                   <td>
-                    <button
+                    <label
                       className="btn btn-xs btn-error"
-                      onClick={() => handleDeleteBuyer(buyer._id)}
+                      onClick={() => setDeletingBuyer(buyer._id)}
+                      htmlFor="confirmation-modal"
                     >
                       Delete Buyer
-                    </button>
+                    </label>
                   </td>
                   <td>{buyer.userRole}</td>
                 </tr>
@@ -81,6 +84,16 @@ const AllBuyers = () => {
           <p className="text-center font-bold">No Buyers Yet</p>
         )}
       </div>
+      {deletingBuyer && (
+        <ConfirmationModal
+          title={`Are you sure you want to delete this buyer?`}
+          message={`If you delete? It cannot be undone.`}
+          successAction={handleDeleteBuyer}
+          successButtonName="Delete"
+          modalData={deletingBuyer}
+          closeModal={closeModal}
+        ></ConfirmationModal>
+      )}
     </div>
   );
 };

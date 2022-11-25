@@ -1,8 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import ConfirmationModal from "../../../Common/Modal/ConfirmationModal/ConfirmationModal";
 const Makeadmin = () => {
+  const [promote, setPromote] = useState(null);
+  const closeModal = () => {
+    setPromote(null);
+  };
   const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
@@ -59,12 +64,13 @@ const Makeadmin = () => {
                   <td>{user.userEmail}</td>
                   <td>
                     {user?.userRole !== "admin" ? (
-                      <button
-                        onClick={() => handleMakeAdmin(user._id)}
+                      <label
+                        onClick={() => setPromote(user._id)}
                         className="btn btn-xs btn-primary"
+                        htmlFor="confirmation-modal"
                       >
                         Make Admin
-                      </button>
+                      </label>
                     ) : (
                       <p>Already Admin</p>
                     )}
@@ -78,6 +84,16 @@ const Makeadmin = () => {
           <p className="text-center font-bold">No User Yet</p>
         )}
       </div>
+      {promote && (
+        <ConfirmationModal
+          title={`Are you sure you want to Promote to admin?`}
+          message={`If you promote. this id will get full admin access`}
+          successAction={handleMakeAdmin}
+          successButtonName="Promote"
+          modalData={promote}
+          closeModal={closeModal}
+        ></ConfirmationModal>
+      )}
     </div>
   );
 };
