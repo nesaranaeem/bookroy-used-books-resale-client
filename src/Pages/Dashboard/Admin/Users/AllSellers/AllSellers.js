@@ -3,12 +3,12 @@ import React, { useContext } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../../../contexts/AuthProvider/AuthProvider";
 
-const AllBuyers = () => {
+const AllSellers = () => {
   const { logOut } = useContext(AuthContext);
-  const { data: buyers = [], refetch } = useQuery({
-    queryKey: ["buyers"],
+  const { data: sellers = [], refetch } = useQuery({
+    queryKey: ["seller"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/buyers");
+      const res = await fetch("http://localhost:5000/sellers");
       const data = await res.json();
       if (data.status === 401 || data.status === 403) {
         return logOut();
@@ -16,25 +16,28 @@ const AllBuyers = () => {
       return data;
     },
   });
-  const handleDeleteBuyer = (id) => {
-    fetch(`http://localhost:5000/user/${id}`, {
-      method: "DELETE",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount > 0) {
-          toast.success("Deleted successful.");
-          refetch();
-        }
-      });
+  const handleDeleteSeller = (id) => {
+    const proceed = window.confirm(`are you sure you want to remove?`);
+    if (proceed) {
+      fetch(`http://localhost:5000/user/${id}`, {
+        method: "DELETE",
+        headers: {
+          authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.deletedCount > 0) {
+            toast.success("Deleted successful.");
+            refetch();
+          }
+        });
+    }
   };
 
   return (
     <div>
-      <h2 className="text-3xl">All Buyers</h2>
+      <h2 className="text-3xl">All Sellers</h2>
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -47,20 +50,20 @@ const AllBuyers = () => {
             </tr>
           </thead>
           <tbody>
-            {buyers.map((buyer, i) => (
-              <tr key={buyer._id}>
+            {sellers.map((seller, i) => (
+              <tr key={seller._id}>
                 <th>{i + 1}</th>
-                <td>{buyer.userName}</td>
-                <td>{buyer.userEmail}</td>
+                <td>{seller.userName}</td>
+                <td>{seller.userEmail}</td>
                 <td>
                   <button
                     className="btn btn-xs btn-error"
-                    onClick={() => handleDeleteBuyer(buyer._id)}
+                    onClick={() => handleDeleteSeller(seller._id)}
                   >
-                    Delete Buyer
+                    Delete Seller
                   </button>
                 </td>
-                <td>{buyer.userRole}</td>
+                <td>{seller.userRole}</td>
               </tr>
             ))}
           </tbody>
@@ -70,4 +73,4 @@ const AllBuyers = () => {
   );
 };
 
-export default AllBuyers;
+export default AllSellers;
