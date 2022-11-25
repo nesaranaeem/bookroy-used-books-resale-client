@@ -30,18 +30,7 @@ const AdvertisedItemCard = ({ advertisedItem }) => {
               </div>
             </h2>
             <p>Book Author: {bookAuthor}</p>
-            <div className="badge badge-outline">Price: ${sellingPrice}</div>
-            {description?.length > 90 ? (
-              <p>{description.slice(0, 90)}...</p>
-            ) : (
-              <p>{description}</p>
-            )}
             <div className="card-actions justify-start">
-              <Link to={`/advertisement/${id}`}>
-                <Button>Details</Button>
-              </Link>
-            </div>
-            <div className="card-actions justify-end">
               Seller:
               <div className="badge p-3 font-bold">
                 {isVerified && (
@@ -67,6 +56,17 @@ const AdvertisedItemCard = ({ advertisedItem }) => {
                 )}
                 {listedBy}
               </div>
+            </div>
+            <div className="badge badge-outline">Price: ${sellingPrice}</div>
+            {description?.length > 90 ? (
+              <p>{description.slice(0, 90)}...</p>
+            ) : (
+              <p>{description}</p>
+            )}
+            <div className="card-actions justify-start">
+              <Link to={`/advertisement/${id}`}>
+                <Button>Details</Button>
+              </Link>
             </div>
           </div>
         </div>

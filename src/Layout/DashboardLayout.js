@@ -5,10 +5,12 @@ import { AuthContext } from "../contexts/AuthProvider/AuthProvider";
 import useAdmin from "../hooks/useAdmin";
 import { Helmet } from "react-helmet";
 import useBuyer from "../hooks/useBuyer";
+import useSeller from "../hooks/useSeller";
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
   const [isAdmin] = useAdmin(user?.email);
   const [isBuyer] = useBuyer(user?.email);
+  const [isSeller] = useSeller(user?.email);
   return (
     <>
       <Helmet>
@@ -63,6 +65,30 @@ const DashboardLayout = () => {
                   className="block rounded-xl bg-white p-4"
                 >
                   <h3 class="text-xl font-bold text-gray-900">My Orders</h3>
+                </Link>
+              </div>
+            </div>
+          </>
+        )}
+        {isSeller && (
+          <>
+            <div className="w-44">
+              <div class="rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                <Link
+                  to="/dashboard/add-product"
+                  className="block rounded-xl bg-white p-4"
+                >
+                  <h3 class="text-xl font-bold text-gray-900">Add Product</h3>
+                </Link>
+              </div>
+            </div>
+            <div className="w-44">
+              <div class="rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                <Link
+                  to="/dashboard/my-products"
+                  className="block rounded-xl bg-white p-4"
+                >
+                  <h3 class="text-xl font-bold text-gray-900">My Products</h3>
                 </Link>
               </div>
             </div>

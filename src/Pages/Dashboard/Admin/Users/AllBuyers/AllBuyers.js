@@ -8,9 +8,7 @@ const AllBuyers = () => {
   const { data: buyers = [], refetch } = useQuery({
     queryKey: ["buyers"],
     queryFn: async () => {
-      const res = await fetch(
-        "https://bookroy-book-resale-market-server.vercel.app/buyers"
-      );
+      const res = await fetch("http://localhost:5000/buyers");
       const data = await res.json();
       if (data.status === 401 || data.status === 403) {
         return logOut();
@@ -21,7 +19,7 @@ const AllBuyers = () => {
   const handleDeleteBuyer = (id) => {
     const proceed = window.confirm(`are you sure you want to remove?`);
     if (proceed) {
-      fetch(`https://bookroy-book-resale-market-server.vercel.app/user/${id}`, {
+      fetch(`http://localhost:5000/user/${id}`, {
         method: "DELETE",
         headers: {
           authorization: `bearer ${localStorage.getItem("bookroy-token")}`,

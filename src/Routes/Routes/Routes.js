@@ -5,8 +5,11 @@ import AllBuyers from "../../Pages/Dashboard/Admin/Users/AllBuyers/AllBuyers";
 import AllSellers from "../../Pages/Dashboard/Admin/Users/AllSellers/AllSellers";
 import Makeadmin from "../../Pages/Dashboard/Admin/Users/MakeAdmin";
 import Dashboard from "../../Pages/Dashboard/Dashboard/Dashboard";
+import AddProduct from "../../Pages/Dashboard/Seller/AddProduct/AddProduct";
+import ManageProducts from "../../Pages/Dashboard/Seller/ManageProducts/ManageProduct";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import SellerRoute from "../SellerRoute/SellerRoute";
 
 const { createBrowserRouter } = require("react-router-dom");
 const { default: Main } = require("../../Layout/Main");
@@ -63,6 +66,22 @@ const router = createBrowserRouter([
               <AdminRoute>
                 <AllSellers></AllSellers>
               </AdminRoute>
+            ),
+          },
+          {
+            path: "/dashboard/add-product",
+            element: (
+              <SellerRoute>
+                <AddProduct></AddProduct>
+              </SellerRoute>
+            ),
+          },
+          {
+            path: "/dashboard/my-products",
+            element: (
+              <SellerRoute>
+                <ManageProducts></ManageProducts>
+              </SellerRoute>
             ),
           },
         ],

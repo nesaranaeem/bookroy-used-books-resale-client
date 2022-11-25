@@ -6,24 +6,19 @@ const Makeadmin = () => {
   const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await fetch(
-        "https://bookroy-book-resale-market-server.vercel.app/users"
-      );
+      const res = await fetch("http://localhost:5000/users");
       const data = await res.json();
       return data;
     },
   });
 
   const handleMakeAdmin = (id) => {
-    fetch(
-      `https://bookroy-book-resale-market-server.vercel.app/users/admin/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-        },
-      }
-    )
+    fetch(`http://localhost:5000/users/admin/${id}`, {
+      method: "PUT",
+      headers: {
+        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
@@ -43,7 +38,7 @@ const Makeadmin = () => {
           content="BookRoy is a platform for resale used books"
         />
       </Helmet>
-      <h2 className="text-3xl">Make Admin</h2>
+      <h2 className="text-3xl my-4">Make Admin</h2>
       <div className="overflow-x-auto">
         {users?.length > 0 ? (
           <table className="table w-full">

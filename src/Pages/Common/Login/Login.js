@@ -29,7 +29,7 @@ const Login = () => {
         const currentUser = {
           email: user.email,
         };
-        fetch("https://bookroy-book-resale-market-server.vercel.app/jwt", {
+        fetch("http://localhost:5000/jwt", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -56,7 +56,7 @@ const Login = () => {
         const currentUser = {
           email: user.email,
         };
-        fetch("https://bookroy-book-resale-market-server.vercel.app/jwt", {
+        fetch("http://localhost:5000/jwt", {
           method: "POST",
           headers: {
             "content-type": "application/json",
