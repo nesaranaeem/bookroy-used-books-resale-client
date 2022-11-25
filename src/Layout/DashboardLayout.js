@@ -3,57 +3,75 @@ import { Link, Outlet } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthProvider/AuthProvider";
 
 import useAdmin from "../hooks/useAdmin";
+import { Helmet } from "react-helmet";
+import useBuyer from "../hooks/useBuyer";
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
   const [isAdmin] = useAdmin(user?.email);
+  const [isBuyer] = useBuyer(user?.email);
   return (
-    <div>
-      <div className="lg:hidden">
-        <div>
-          <label
-            htmlFor="dashboard-drawer"
-            tabIndex={2}
-            className="btn btn-ghost lg:hidden"
-          >
-            <p className="btn">Menu</p>
-          </label>
-        </div>
-      </div>
-      <div className="drawer drawer-mobile">
-        <input
-          id="dashboard-drawer"
-          type="checkbox"
-          className="drawer-toggle"
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Dashboard - BookRoy</title>
+        <meta
+          name="description"
+          content="BookRoy is a platform for resale used books"
         />
-        <div className="drawer-content">
-          <Outlet></Outlet>
-        </div>
-        <div className="drawer-side">
-          <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 text-gray-50 my-4">
-            <li className="bg-accent-content rounded-lg mt-3">
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            {isAdmin && (
-              <>
-                <li className="bg-accent-content rounded-lg mt-3">
-                  <Link to="/dashboard/makeadmin">Make Admin</Link>
-                </li>
-                <li className="bg-accent-content rounded-lg mt-3">
-                  <Link to="/dashboard/all-buyers">All Buyers</Link>
-                </li>
-                <li className="bg-accent-content rounded-lg my-3">
-                  <Link to="/dashboard/all-sellers">All Sellers</Link>
-                </li>
-                <li className="bg-accent-content rounded-lg">
-                  <Link to="/dashboard/reported-items">Reported Items</Link>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
+      </Helmet>
+      <div className="grid gap-3 justify-items-center grid-cols-1 lg:grid-cols-5">
+        {isAdmin && (
+          <>
+            <div className="w-44">
+              <div class="rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                <Link
+                  to="/dashboard/make-admin"
+                  className="block rounded-xl bg-white p-4"
+                >
+                  <h3 class="text-xl font-bold text-gray-900">Make Admin</h3>
+                </Link>
+              </div>
+            </div>
+            <div className="w-44">
+              <div class="rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                <Link
+                  to="/dashboard/all-buyers"
+                  className="block rounded-xl bg-white p-4"
+                >
+                  <h3 class="text-xl font-bold text-gray-900">All Buyers</h3>
+                </Link>
+              </div>
+            </div>
+            <div className="w-44">
+              <div class="rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                <Link
+                  to="/dashboard/all-sellers"
+                  className="block rounded-xl bg-white p-4"
+                >
+                  <h3 class="text-xl font-bold text-gray-900">All Sellers</h3>
+                </Link>
+              </div>
+            </div>
+          </>
+        )}
+        {isBuyer && (
+          <>
+            <div className="w-44">
+              <div class="rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                <Link
+                  to="/dashboard/my-orders"
+                  className="block rounded-xl bg-white p-4"
+                >
+                  <h3 class="text-xl font-bold text-gray-900">My Orders</h3>
+                </Link>
+              </div>
+            </div>
+          </>
+        )}
       </div>
-    </div>
+
+      <Outlet></Outlet>
+    </>
   );
 };
 

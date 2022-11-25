@@ -43,7 +43,6 @@ const Footer = () => {
           <a className="link link-hover">Cookie policy</a>
         </div>
       </footer>
-      ;
     </>
   );
 };

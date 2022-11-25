@@ -4,6 +4,7 @@ import SignUp from "../../Pages/Common/SignUp/SignUp";
 import AllBuyers from "../../Pages/Dashboard/Admin/Users/AllBuyers/AllBuyers";
 import AllSellers from "../../Pages/Dashboard/Admin/Users/AllSellers/AllSellers";
 import Makeadmin from "../../Pages/Dashboard/Admin/Users/MakeAdmin";
+import Dashboard from "../../Pages/Dashboard/Dashboard/Dashboard";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
@@ -38,10 +39,10 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/dashboard",
-            element: <h2>Dashboard</h2>,
+            element: <Dashboard></Dashboard>,
           },
           {
-            path: "/dashboard/makeadmin",
+            path: "/dashboard/make-admin",
             element: (
               <AdminRoute>
                 <Makeadmin></Makeadmin>
