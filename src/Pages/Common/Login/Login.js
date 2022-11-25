@@ -29,7 +29,7 @@ const Login = () => {
         const currentUser = {
           email: user.email,
         };
-        fetch("https://bookroy-book-resale-market-server.vercel.app/jwt", {
+        fetch("http://localhost:5000/jwt", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -56,7 +56,7 @@ const Login = () => {
         const currentUser = {
           email: user.email,
         };
-        fetch("https://bookroy-book-resale-market-server.vercel.app/jwt", {
+        fetch("http://localhost:5000/jwt", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -138,9 +138,9 @@ const Login = () => {
               <input className="btn" value="Login" type="submit" />
             </div>
             <p>
-              New to Hello Doctor?
-              <Link to="/signup" className="text-secondary pl-1">
-                Create new account
+              New to BookRoy?
+              <Link to="/signup" className="btn btn-xs m-2">
+                Signup
               </Link>
             </p>
             <div className="divider">OR</div>

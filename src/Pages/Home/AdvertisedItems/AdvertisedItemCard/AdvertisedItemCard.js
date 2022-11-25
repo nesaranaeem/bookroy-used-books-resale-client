@@ -18,7 +18,7 @@ const AdvertisedItemCard = ({ advertisedItem }) => {
   return (
     <>
       {!isSold && (
-        <div className="card w-full bg-base-100 shadow-xl">
+        <div className="card w-9/12 lg:w-96 bg-base-100 shadow-xl">
           <figure>
             <img src={img} alt={name} />
           </figure>

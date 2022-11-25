@@ -23,6 +23,31 @@ const NavBar = () => {
       </li>
     </>
   );
+  const customItems = (
+    <>
+      {user?.uid ? (
+        <>
+          <img className="w-10 m-2 rounded-full" src={user.photoURL} alt="" />
+
+          <Link to="/dashboard" className="btn btn-xs m-2">
+            Dashboard
+          </Link>
+          <button onClick={handleLogOut} className="btn btn-xs">
+            Logout
+          </button>
+        </>
+      ) : (
+        <>
+          <Link to="/signup" className="btn btn-xs m-2">
+            Signup
+          </Link>
+          <Link to="/login" className="btn btn-xs m-2">
+            Login
+          </Link>
+        </>
+      )}
+    </>
+  );
   return (
     <>
       <div className="navbar bg-base-100 flex justify-between">
@@ -49,6 +74,7 @@ const NavBar = () => {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
               {navLinks}
+              {customItems}
             </ul>
           </div>
           <Link to="/" className="btn btn-ghost normal-case text-xl">
@@ -57,30 +83,7 @@ const NavBar = () => {
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal p-0">{navLinks}</ul>
-        </div>
-        {user?.uid && (
-          <img className="w-10 rounded-full" src={user.photoURL} alt="" />
-        )}
-        <div className="navbar-end">
-          {user?.uid ? (
-            <>
-              <Link to="/dashboard" className="btn btn-sm mr-4">
-                Dashboard
-              </Link>
-              <button className="btn btn-sm" onClick={handleLogOut}>
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="btn btn-sm mr-4">
-                Login
-              </Link>
-              <Link to="/signup" className="btn btn-sm">
-                Sign Up
-              </Link>
-            </>
-          )}
+          {customItems}
         </div>
       </div>
     </>

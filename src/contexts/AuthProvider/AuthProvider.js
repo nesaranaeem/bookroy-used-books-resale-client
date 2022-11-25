@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
     });
   };
   const logOut = () => {
-    localStorage.removeItem("the-wildlife-token");
+    localStorage.removeItem("bookroy-token");
     return signOut(auth);
   };
 

@@ -2,28 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import toast from "react-hot-toast";
 
-const AllUsers = () => {
+const Makeadmin = () => {
   const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await fetch(
-        "https://bookroy-book-resale-market-server.vercel.app/users"
-      );
+      const res = await fetch("http://localhost:5000/users");
       const data = await res.json();
       return data;
     },
   });
 
   const handleMakeAdmin = (id) => {
-    fetch(
-      `https://bookroy-book-resale-market-server.vercel.app/users/admin/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          authorization: `bearer ${localStorage.getItem("accessToken")}`,
-        },
-      }
-    )
+    fetch(`http://localhost:5000/users/admin/${id}`, {
+      method: "PUT",
+      headers: {
+        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
@@ -35,7 +30,7 @@ const AllUsers = () => {
 
   return (
     <div>
-      <h2 className="text-3xl">All Users</h2>
+      <h2 className="text-3xl">Make Admin</h2>
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -45,7 +40,6 @@ const AllUsers = () => {
               <th>Email</th>
               <th>Admin</th>
               <th>Current Role</th>
-              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -55,19 +49,18 @@ const AllUsers = () => {
                 <td>{user.userName}</td>
                 <td>{user.userEmail}</td>
                 <td>
-                  {user?.userRole !== "admin" && (
+                  {user?.userRole !== "admin" ? (
                     <button
                       onClick={() => handleMakeAdmin(user._id)}
                       className="btn btn-xs btn-primary"
                     >
                       Make Admin
                     </button>
+                  ) : (
+                    <p>Already Admin</p>
                   )}
                 </td>
                 <td>{user?.userRole}</td>
-                <td>
-                  <button className="btn btn-xs btn-danger">Delete</button>
-                </td>
               </tr>
             ))}
           </tbody>
@@ -77,4 +70,4 @@ const AllUsers = () => {
   );
 };
 
-export default AllUsers;
+export default Makeadmin;

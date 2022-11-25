@@ -1,7 +1,8 @@
 import DashboardLayout from "../../Layout/DashboardLayout";
 import Login from "../../Pages/Common/Login/Login";
 import SignUp from "../../Pages/Common/SignUp/SignUp";
-import AllUsers from "../../Pages/Dashboard/Admin/Users/AllUsers";
+import AllBuyers from "../../Pages/Dashboard/Admin/Users/AllBuyers/AllBuyers";
+import Makeadmin from "../../Pages/Dashboard/Admin/Users/MakeAdmin";
 import AdminRoute from "../AdminRoute/AdminRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
@@ -39,10 +40,18 @@ const router = createBrowserRouter([
             element: <h2>Dashboard</h2>,
           },
           {
-            path: "/dashboard/allusers",
+            path: "/dashboard/makeadmin",
             element: (
               <AdminRoute>
-                <AllUsers></AllUsers>
+                <Makeadmin></Makeadmin>
+              </AdminRoute>
+            ),
+          },
+          {
+            path: "/dashboard/all-buyers",
+            element: (
+              <AdminRoute>
+                <AllBuyers></AllBuyers>
               </AdminRoute>
             ),
           },
