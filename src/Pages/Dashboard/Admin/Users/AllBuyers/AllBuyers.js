@@ -17,19 +17,22 @@ const AllBuyers = () => {
     },
   });
   const handleDeleteBuyer = (id) => {
-    fetch(`http://localhost:5000/user/${id}`, {
-      method: "DELETE",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount > 0) {
-          toast.success("Deleted successful.");
-          refetch();
-        }
-      });
+    const proceed = window.confirm(`are you sure you want to remove?`);
+    if (proceed) {
+      fetch(`http://localhost:5000/user/${id}`, {
+        method: "DELETE",
+        headers: {
+          authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.deletedCount > 0) {
+            toast.success("Deleted successful.");
+            refetch();
+          }
+        });
+    }
   };
 
   return (
