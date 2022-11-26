@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../../contexts/AuthProvider/AuthProvider";
+import { useQuery } from "@tanstack/react-query";
 const AddProduct = () => {
   const [currentDateMeta, setCurrentDateMeta] = useState(new Date());
   const { user } = useContext(AuthContext);
@@ -14,7 +15,7 @@ const AddProduct = () => {
   } = useForm();
   const navigate = useNavigate();
   const imgbbApi = process.env.REACT_APP_imgbbApi;
-  const handleAddDoctor = (data) => {
+  const handleAddProduct = (data) => {
     console.log(data);
     const image = data.image[0];
     const formData = new FormData();
@@ -28,7 +29,7 @@ const AddProduct = () => {
       .then((imageData) => {
         console.log(imageData);
         if (imageData.success) {
-          const doctor = {
+          const productData = {
             productName: data.name,
             productDetails: data.details,
             productPrice: data.productPrice,
@@ -50,7 +51,7 @@ const AddProduct = () => {
               "content-type": "application/json",
               authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
             },
-            body: JSON.stringify(doctor),
+            body: JSON.stringify(productData),
           })
             .then((res) => res.json())
             .then((result) => {
@@ -61,13 +62,24 @@ const AddProduct = () => {
         }
       });
   };
-
+  // here data:specialities = data er new name speciality
+  const { data: categories, isLoading } = useQuery({
+    queryKey: ["category"],
+    queryFn: async () => {
+      const res = await fetch("http://localhost:5000/categories");
+      const data = await res.json();
+      return data;
+    },
+  });
+  if (isLoading) {
+    return <h1>Loading</h1>;
+  }
   return (
     <div>
       <div className="hero-content flex-col">
         <form
           className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100"
-          onSubmit={handleSubmit(handleAddDoctor)}
+          onSubmit={handleSubmit(handleAddProduct)}
         >
           <div className="card-body">
             <h3 className="text-center text-2xl">Add Product</h3>
@@ -221,15 +233,18 @@ const AddProduct = () => {
                 })}
                 className="select select-bordered w-full max-w-xs"
               >
-                <option value="poem">Poems</option>
-                <option value="story">Story</option>
-                <option value="study">Study</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.categoryName}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="form-control mt-2">
               <label className="label">
                 <span className="label-text">Product Image</span>
               </label>
+
               <input
                 {...register("image", {
                   required: "image is required",

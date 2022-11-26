@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { AuthContext } from "../../../../contexts/AuthProvider/AuthProvider";
 import ConfirmationModal from "../../../Common/Modal/ConfirmationModal/ConfirmationModal";
 import { format, parseISO } from "date-fns";
+import Loader from "../../../Common/Loader/Loader";
 const ManageProducts = () => {
   const [deletingProduct, setDeletingProduct] = useState(null);
   const [promote, setPromote] = useState(null);
@@ -51,6 +52,9 @@ const ManageProducts = () => {
       } catch (error) {}
     },
   });
+  if (isLoading) {
+    return <Loader></Loader>;
+  }
   const setPromoteProduct = (id) => {
     fetch(`http://localhost:5000/product/${id}`, {
       method: "PUT",

@@ -1,19 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import Button from "../../../../Components/Buttons/Button";
-//axios
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-const AdvertisedItemCard = ({ advertisedItem }) => {
-  const {
-    productName,
-    productImage,
-    productPostedBy,
-    productDetails,
-    _id,
-    productPrice,
-  } = advertisedItem;
+import Button from "../../../Components/Buttons/Button";
 
+const CategoryCard = ({ product }) => {
+  const { productName, productImage, _id, productDetails, productPrice } =
+    product;
   return (
     <>
       <div className="card w-9/12 lg:w-96 bg-base-100 shadow-xl">
@@ -63,7 +54,7 @@ const AdvertisedItemCard = ({ advertisedItem }) => {
           )}
           <div className="card-actions justify-start">
             <Link to={`/advertisement/${_id}`}>
-              <Button>Details</Button>
+              <Button>Book Now</Button>
             </Link>
           </div>
         </div>
@@ -72,4 +63,4 @@ const AdvertisedItemCard = ({ advertisedItem }) => {
   );
 };
 
-export default AdvertisedItemCard;
+export default CategoryCard;

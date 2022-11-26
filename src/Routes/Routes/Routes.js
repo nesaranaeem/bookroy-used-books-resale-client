@@ -1,4 +1,5 @@
 import DashboardLayout from "../../Layout/DashboardLayout";
+import Category from "../../Pages/Category/Category";
 import ErrorPage from "../../Pages/Common/ErrorPage/ErrorPage";
 import Login from "../../Pages/Common/Login/Login";
 import SignUp from "../../Pages/Common/SignUp/SignUp";
@@ -35,6 +36,16 @@ const router = createBrowserRouter([
         element: <Login></Login>,
       },
       {
+        path: "/category/:id",
+        element: (
+          <PrivateRoute>
+            <Category></Category>
+          </PrivateRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/category/${params.id}`),
+      },
+      {
         path: "/dashboard",
         element: (
           <PrivateRoute>
@@ -45,7 +56,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/dashboard",
-            element: <Dashboard></Dashboard>,
+            element: (
+              <PrivateRoute>
+                <Dashboard></Dashboard>
+              </PrivateRoute>
+            ),
           },
           {
             path: "/dashboard/make-admin",

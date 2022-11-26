@@ -64,7 +64,7 @@ const AllSellers = () => {
           content="BookRoy is a platform for resale used books"
         />
       </Helmet>
-      <h2 className="text-3xl my-4">All Buyers</h2>
+      <h2 className="text-3xl my-4">All Sellers</h2>
       <div className="overflow-x-auto">
         {sellers?.length > 0 ? (
           <table className="table w-full">

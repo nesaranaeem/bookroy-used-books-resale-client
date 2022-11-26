@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../../Components/Buttons/Button";
 import Category from "./Category";
-
+import axios from "axios";
 const Categories = () => {
   const featuredCategoriesData = [
     {
@@ -26,6 +26,14 @@ const Categories = () => {
       img: "https://images.unsplash.com/photo-1520467795206-62e33627e6ce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80",
     },
   ];
+  const [categories, setCategories] = useState(null);
+  const categoriesURL = "http://localhost:5000/categories";
+  useEffect(() => {
+    axios.get(categoriesURL).then((response) => {
+      setCategories(response.data);
+    });
+  }, [categories]);
+  if (!categories) return null;
   return (
     <>
       <section>
@@ -35,12 +43,12 @@ const Categories = () => {
               Featured Categories
             </h3>
             <p className="mx-auto max-w-xl sm:text-lg sm:leading-relaxed">
-              Browse Featured Categories
+              Browse Categories
             </p>
           </div>
           <div className="my-8 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
-            {featuredCategoriesData.map((category) => (
-              <Category key={category.id} category={category}></Category>
+            {categories.map((category) => (
+              <Category key={category._id} category={category}></Category>
             ))}
           </div>
           {featuredCategoriesData.length > 2 && (
