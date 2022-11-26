@@ -10,10 +10,10 @@ const Category = () => {
       <section>
         <div className="text-center">
           <h3 className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-2xl font-extrabold text-transparent sm:text-2xl">
-            Recent Listing
+            Recent From This Category
           </h3>
           <p className="mx-auto max-w-xl sm:text-lg sm:leading-relaxed">
-            Browse Reacent Listing
+            Browse Recent From This Category
           </p>
         </div>
         <div className="my-8 grid gap-12 grid-cols-1 md:grid-cols-3 lg:grid-cols-3 justify-items-center">

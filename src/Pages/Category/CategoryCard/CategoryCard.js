@@ -1,10 +1,36 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Button from "../../../Components/Buttons/Button";
+import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
+import ConfirmationModal from "../../Common/Modal/ConfirmationModal/ConfirmationModal";
 
 const CategoryCard = ({ product }) => {
   const { productName, productImage, _id, productDetails, productPrice } =
     product;
+  const { user } = useContext(AuthContext);
+  const [report, setReport] = useState(null);
+  const closeModal = () => {
+    setReport(null);
+  };
+  const data = {
+    product,
+  };
+  const handleReportProduct = (id) => {
+    fetch("http://localhost:5000/reports", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        toast.success(`Report Sent Successfully`);
+      });
+  };
   return (
     <>
       <div className="card w-9/12 lg:w-96 bg-base-100 shadow-xl">
@@ -14,10 +40,18 @@ const CategoryCard = ({ product }) => {
         <div className="card-body">
           <h2 className="card-title">
             {productName}
+            <label
+              htmlFor="confirmation-modal"
+              onClick={() => setReport(productName)}
+              className="btn btn-xs"
+            >
+              Report
+            </label>
             {/* <div className="tooltip" data-tip={`Sponsored by ${listedBy}`}>
                 <button className="badge badge-secondary">Ads</button>
               </div> */}
           </h2>
+
           {/* <p>Book Author: {bookAuthor}</p> */}
           <div className="card-actions justify-start">
             Seller:
@@ -52,12 +86,23 @@ const CategoryCard = ({ product }) => {
           ) : (
             <p>{productDetails}</p>
           )}
+
           <div className="card-actions justify-start">
             <Link to={`/advertisement/${_id}`}>
               <Button>Book Now</Button>
             </Link>
           </div>
         </div>
+        {report && (
+          <ConfirmationModal
+            title={`Report this product`}
+            message={`do you beleive that this product is not following TOS`}
+            successAction={handleReportProduct}
+            successButtonName="Yes"
+            modalData={report}
+            closeModal={closeModal}
+          ></ConfirmationModal>
+        )}
       </div>
     </>
   );
