@@ -1,4 +1,5 @@
 import DashboardLayout from "../../Layout/DashboardLayout";
+import ErrorPage from "../../Pages/Common/ErrorPage/ErrorPage";
 import Login from "../../Pages/Common/Login/Login";
 import SignUp from "../../Pages/Common/SignUp/SignUp";
 import AllBuyers from "../../Pages/Dashboard/Admin/Users/AllBuyers/AllBuyers";
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -39,6 +41,7 @@ const router = createBrowserRouter([
             <DashboardLayout></DashboardLayout>
           </PrivateRoute>
         ),
+        errorElement: <ErrorPage></ErrorPage>,
         children: [
           {
             path: "/dashboard",
