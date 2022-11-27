@@ -8,8 +8,8 @@ import Button from "../../../Components/Buttons/Button";
 import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
 import useBuyer from "../../../hooks/useBuyer";
 import ConfirmationModal from "../../Common/Modal/ConfirmationModal/ConfirmationModal";
-
-const CategoryCard = ({ product, seller }) => {
+import { format, parseISO } from "date-fns";
+const CategoryCard = ({ product }) => {
   const {
     productName,
     productImage,
@@ -21,6 +21,7 @@ const CategoryCard = ({ product, seller }) => {
     buyingPrice,
     yearOfPurchase,
     productLocation,
+    productPostedOn,
   } = product;
 
   const { user, logOut } = useContext(AuthContext);
@@ -101,7 +102,9 @@ const CategoryCard = ({ product, seller }) => {
             .then((res) => res.json())
             .then((data) => {
               if (data.modifiedCount > 0) {
-                toast.success("Product Marked as SOLD");
+                toast.success(
+                  "Product Marked as Booked. It's can't be booked anymore "
+                );
               }
               if (data.status === 401 || data.status === 403) {
                 return logOut();
@@ -112,6 +115,15 @@ const CategoryCard = ({ product, seller }) => {
         }
       });
   };
+  const [sellerInfo, setSellerInfo] = useState([]);
+  useEffect(() => {
+    fetch(`http://localhost:5000/idDetails?email=${product.productPostedBy}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => setSellerInfo(data));
+  }, [product]);
+  console.log(sellerInfo);
   return (
     <>
       <div className="card w-9/12 lg:w-96 bg-base-100 shadow-xl">
@@ -140,9 +152,10 @@ const CategoryCard = ({ product, seller }) => {
                 <button className="badge badge-secondary">Ads</button>
               </div> */}
           </h2>
-
+          Posted on:{" "}
+          {format(parseISO(product.productPostedOn), "yyyy-MM-dd' 'HH:mm")}
           <div className="card-actions justify-start">
-            Seller:{productPostedBy}
+            Seller:{productPostedBy} {sellerInfo && <p>{sellerInfo._id}</p>}
             {/* <div className="badge p-3 font-bold">
                 {isVerified && (
                   <div
@@ -190,7 +203,6 @@ const CategoryCard = ({ product, seller }) => {
               {yearOfPurchase}, {productDetails}
             </p>
           )}
-
           <div className="card-actions justify-start">
             {productStatus === "sold" ? (
               <button className="btn" disabled>

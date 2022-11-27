@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdvertisedItemCard from "./AdvertisedItemCard/AdvertisedItemCard";
 //axios
 import axios from "axios";
+import CategoryCard from "../../Category/CategoryCard/CategoryCard";
 const AdvertisedItems = () => {
   const [promotedProducts, setPromotedProducts] = useState(null);
   const promotedProductsURL = "http://localhost:5000/promoted-products";
@@ -22,11 +23,12 @@ const AdvertisedItems = () => {
             Browse Advertised Listing
           </p>
         </div>
+
         <div className="my-8 grid gap-12 grid-cols-1 md:grid-cols-3 lg:grid-cols-3 justify-items-center">
           {promotedProducts.map((advertisedItem) => (
             <AdvertisedItemCard
               key={advertisedItem._id}
-              advertisedItem={advertisedItem}
+              product={advertisedItem}
             ></AdvertisedItemCard>
           ))}
         </div>
