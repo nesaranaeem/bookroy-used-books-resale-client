@@ -1,13 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useRouteError } from "react-router-dom";
+import errorImg from "../../../img/error.png";
 const ErrorPage = () => {
   const error = useRouteError();
   return (
     <div class="grid h-screen px-4 bg-white place-content-center">
       <div class="text-center">
         <h1 class="font-black text-gray-200 text-9xl">{error.status}</h1>
-
+        <img className="w-1/2 mx-auto" src={errorImg} alt="" />
         <p class="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
           {error.statusText}
         </p>

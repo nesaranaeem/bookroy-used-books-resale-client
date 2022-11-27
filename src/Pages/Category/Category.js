@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import CategoryCard from "./CategoryCard/CategoryCard";
 
-const Category = () => {
+const Category = ({ productPostedBy }) => {
   const products = useLoaderData();
 
   return (

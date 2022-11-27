@@ -3,6 +3,7 @@ import Category from "../../Pages/Category/Category";
 import ErrorPage from "../../Pages/Common/ErrorPage/ErrorPage";
 import Login from "../../Pages/Common/Login/Login";
 import SignUp from "../../Pages/Common/SignUp/SignUp";
+import ReportedItems from "../../Pages/Dashboard/Admin/ReportedItems/ReportedItems";
 import AllBuyers from "../../Pages/Dashboard/Admin/Users/AllBuyers/AllBuyers";
 import AllSellers from "../../Pages/Dashboard/Admin/Users/AllSellers/AllSellers";
 import Makeadmin from "../../Pages/Dashboard/Admin/Users/MakeAdmin";
@@ -67,6 +68,14 @@ const router = createBrowserRouter([
             element: (
               <AdminRoute>
                 <Makeadmin></Makeadmin>
+              </AdminRoute>
+            ),
+          },
+          {
+            path: "/dashboard/reported-items",
+            element: (
+              <AdminRoute>
+                <ReportedItems></ReportedItems>
               </AdminRoute>
             ),
           },

@@ -54,6 +54,16 @@ const DashboardLayout = () => {
                 </Link>
               </div>
             </div>
+            <div className="w-44">
+              <div class="rounded-2xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 shadow-xl">
+                <Link
+                  to="/dashboard/reported-items"
+                  className="block rounded-xl bg-white p-4"
+                >
+                  <h3 class="text-xl font-bold text-gray-900">Report Items</h3>
+                </Link>
+              </div>
+            </div>
           </>
         )}
         {isBuyer && (

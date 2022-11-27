@@ -42,12 +42,7 @@ const SignUp = () => {
               const currentUser = {
                 email: user.email,
               };
-              // const userData = {
-              //   userName: signupData.name,
-              //   userEmail: signupData.email,
-              //   photoURL: photoURL,
-              //   userRole: signupData.userRole,
-              // };
+
               fetch("http://localhost:5000/jwt", {
                 method: "POST",
                 headers: {
@@ -115,12 +110,6 @@ const SignUp = () => {
         saveUser(user.displayName, user.email, user.photoURL, "buyer");
         navigate(from, { replace: true });
         toast.success(`Hello, ${user.displayName}. Signup Successed`);
-        // const userData = {
-        //   userName: user.displayName,
-        //   userEmail: user?.email,
-        //   photoURL: user?.photoURL,
-        //   userRole: "buyer",
-        // };
 
         setLoading(false);
         navigate(from, { replace: true });
