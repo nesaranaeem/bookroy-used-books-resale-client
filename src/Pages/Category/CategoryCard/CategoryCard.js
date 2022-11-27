@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { data } from "autoprefixer";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -17,8 +17,13 @@ const CategoryCard = ({ product, seller }) => {
     productDetails,
     productPrice,
     productPostedBy,
+    productStatus,
+    buyingPrice,
+    yearOfPurchase,
+    productLocation,
   } = product;
-  const { user } = useContext(AuthContext);
+
+  const { user, logOut } = useContext(AuthContext);
   const [isBuyer] = useBuyer(user?.email);
   const [currentDateMeta, setCurrentDateMeta] = useState(new Date());
   const productData = {
@@ -35,11 +40,6 @@ const CategoryCard = ({ product, seller }) => {
     setReport(null);
     setBookData(null);
   };
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
   const handleReportProduct = async (productData) => {
     fetch("http://localhost:5000/reports", {
       method: "POST",
@@ -57,13 +57,60 @@ const CategoryCard = ({ product, seller }) => {
       });
   };
   const [getBookData, setGetBookData] = useState("");
-  const handleBookNow = (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const addedBy = `${user?.displayName}`;
-    const adderemail = user?.email || "Guest";
-    const phoneNumber = form.phoneNumber.value;
-    console.log(phoneNumber, addedBy);
+  const handleBookNow = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const productName = form.productName.value;
+    const name = form.name.value;
+    const number = form.phoneNumber.value;
+    const email = form.email.value;
+    const price = form.price.value;
+    const location = form.location.value;
+
+    const submittedData = {
+      name: name,
+      number: number,
+      price: price,
+      email: email,
+      location: location,
+      productName: productName,
+      productId: bookData._id,
+      paid: false,
+    };
+    console.log(submittedData);
+    fetch("http://localhost:5000/bookings", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(submittedData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.acknowledged) {
+          // setAppointmentModalData(null);
+          setBookData(null);
+          toast.success("Booking confirmed");
+          fetch(`http://localhost:5000/updateProduct/${bookData._id}`, {
+            method: "PUT",
+            headers: {
+              authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+            },
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.modifiedCount > 0) {
+                toast.success("Product Marked as SOLD");
+              }
+              if (data.status === 401 || data.status === 403) {
+                return logOut();
+              }
+            });
+        } else {
+          toast.error(data.message);
+        }
+      });
   };
   return (
     <>
@@ -121,21 +168,43 @@ const CategoryCard = ({ product, seller }) => {
                 {listedBy}
               </div> */}
           </div>
-          <div className="badge badge-outline">Price: ${productPrice}</div>
+          <div className="grid grid-cols-1 gap-2 lg:grid-cols-4 justify-items-center">
+            <div className="badge badge-secondary badge-outline">
+              Price:${productPrice}
+            </div>
+
+            <div className="badge badge-outline">{productStatus}</div>
+            <div className="badge badge-secondary badge-outline">
+              {productLocation}
+            </div>
+          </div>
           {productDetails?.length > 90 ? (
-            <p>{productDetails.slice(0, 90)}...</p>
+            <p>
+              Original Price is ${buyingPrice} Year of purchase:{" "}
+              {yearOfPurchase} {productDetails.slice(0, 90)}
+              ...
+            </p>
           ) : (
-            <p>{productDetails}</p>
+            <p>
+              Original Price is ${buyingPrice} Year of purchase:
+              {yearOfPurchase}, {productDetails}
+            </p>
           )}
 
           <div className="card-actions justify-start">
-            <label
-              htmlFor="book-modal"
-              onClick={() => setBookData(product)}
-              className="btn"
-            >
-              Book Now
-            </label>
+            {productStatus === "sold" ? (
+              <button className="btn" disabled>
+                Already Booked
+              </button>
+            ) : (
+              <label
+                htmlFor="book-modal"
+                onClick={() => setBookData(product)}
+                className="btn"
+              >
+                Book Now
+              </label>
+            )}
           </div>
         </div>
         {report && (

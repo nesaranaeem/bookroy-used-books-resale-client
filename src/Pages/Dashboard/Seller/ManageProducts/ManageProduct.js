@@ -65,7 +65,7 @@ const ManageProducts = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
-          toast.success("Product Addded To Advertised List ");
+          toast.success("Product Marked As Sold");
           refetch();
         }
       });

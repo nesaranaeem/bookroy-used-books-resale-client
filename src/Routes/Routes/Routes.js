@@ -7,10 +7,13 @@ import ReportedItems from "../../Pages/Dashboard/Admin/ReportedItems/ReportedIte
 import AllBuyers from "../../Pages/Dashboard/Admin/Users/AllBuyers/AllBuyers";
 import AllSellers from "../../Pages/Dashboard/Admin/Users/AllSellers/AllSellers";
 import Makeadmin from "../../Pages/Dashboard/Admin/Users/MakeAdmin";
+import Orders from "../../Pages/Dashboard/Buyer/Orders/Orders";
 import Dashboard from "../../Pages/Dashboard/Dashboard/Dashboard";
+import Payment from "../../Pages/Dashboard/Payment/Payment";
 import AddProduct from "../../Pages/Dashboard/Seller/AddProduct/AddProduct";
 import ManageProducts from "../../Pages/Dashboard/Seller/ManageProducts/ManageProduct";
 import AdminRoute from "../AdminRoute/AdminRoute";
+import BuyerRoute from "../BuyerRoute/BuyerRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import SellerRoute from "../SellerRoute/SellerRoute";
 
@@ -110,6 +113,20 @@ const router = createBrowserRouter([
                 <ManageProducts></ManageProducts>
               </SellerRoute>
             ),
+          },
+          {
+            path: "/dashboard/my-orders",
+            element: (
+              <BuyerRoute>
+                <Orders></Orders>
+              </BuyerRoute>
+            ),
+          },
+          {
+            path: "/dashboard/payment/:id",
+            element: <Payment></Payment>,
+            loader: ({ params }) =>
+              fetch(`http://localhost:5000/booking/${params.id}`),
           },
         ],
       },
