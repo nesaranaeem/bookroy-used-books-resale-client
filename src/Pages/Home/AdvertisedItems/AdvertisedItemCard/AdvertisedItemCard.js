@@ -199,13 +199,19 @@ const CategoryCard = ({ product }) => {
             </p>
           )}
           <div className="card-actions justify-start">
-            <label
-              htmlFor="book-modal"
-              onClick={() => setBookData(product)}
-              className="btn"
-            >
-              Book Now
-            </label>
+            {isBuyer ? (
+              <label
+                htmlFor="book-modal"
+                onClick={() => setBookData(product)}
+                className="btn"
+              >
+                Book Now
+              </label>
+            ) : (
+              <button className="btn" disabled>
+                Book Now
+              </button>
+            )}
           </div>
         </div>
         {report && (

@@ -11,6 +11,7 @@ import ConfirmationModal from "../../Common/Modal/ConfirmationModal/Confirmation
 import { format, parseISO } from "date-fns";
 import axios from "axios";
 import useVerify from "../../../hooks/useVerify";
+import { is } from "date-fns/locale";
 const CategoryCard = ({ product }) => {
   const {
     productName,
@@ -217,13 +218,17 @@ const CategoryCard = ({ product }) => {
             </p>
           )}
           <div className="card-actions justify-start">
-            <label
-              htmlFor="book-modal"
-              onClick={() => setBookData(product)}
-              className="btn"
-            >
-              Book Now
-            </label>
+            {isBuyer ? (
+              <label
+                htmlFor="book-modal"
+                onClick={() => setBookData(product)}
+                className="btn"
+              >
+                Book Now
+              </label>
+            ) : (
+              <button className="btn">Book Now</button>
+            )}
           </div>
         </div>
         {report && (
