@@ -5,9 +5,13 @@ import { format } from "date-fns";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../../contexts/AuthProvider/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
+import useVerify from "../../../../hooks/useVerify";
+import { Helmet } from "react-helmet";
 const AddProduct = () => {
   const [currentDateMeta, setCurrentDateMeta] = useState(new Date());
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
+  const [isVerify] = useVerify(user?.email);
+
   const {
     register,
     handleSubmit,
@@ -43,15 +47,22 @@ const AddProduct = () => {
             productStatus: "available",
             isAdvertise: false,
             productPostedBy: user?.email,
+            sellerName: user?.displayName,
           };
-          fetch("http://localhost:5000/products", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-              authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-            },
-            body: JSON.stringify(productData),
-          })
+
+          fetch(
+            "https://bookroy-book-resale-market-server.vercel.app/products",
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                authorization: `bearer ${localStorage.getItem(
+                  "bookroy-token"
+                )}`,
+              },
+              body: JSON.stringify(productData),
+            }
+          )
             .then((res) => res.json())
             .then((result) => {
               console.log(result);
@@ -61,12 +72,17 @@ const AddProduct = () => {
         }
       });
   };
-  // here data:specialities = data er new name speciality
+
   const { data: categories, isLoading } = useQuery({
     queryKey: ["category"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/categories");
+      const res = await fetch(
+        "https://bookroy-book-resale-market-server.vercel.app/categories"
+      );
       const data = await res.json();
+      if (data.status === 401 || data.status === 403) {
+        return logOut();
+      }
       return data;
     },
   });
@@ -75,6 +91,14 @@ const AddProduct = () => {
   }
   return (
     <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Add Product - Resale Your Books</title>
+        <meta
+          name="description"
+          content="BookRoy is a platform for resale used books"
+        />
+      </Helmet>
       <div className="hero-content flex-col">
         <form
           className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100"

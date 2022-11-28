@@ -3,7 +3,8 @@ import axios from "axios";
 import AllProductCard from "./AllProductCard/AllProductCard";
 const AllProduct = () => {
   const [products, setProducts] = useState(null);
-  const ProductsURL = "http://localhost:5000/all-product";
+  const ProductsURL =
+    "https://bookroy-book-resale-market-server.vercel.app/all-product";
   useEffect(() => {
     axios.get(ProductsURL).then((response) => {
       setProducts(response.data);

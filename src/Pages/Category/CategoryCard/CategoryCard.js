@@ -9,7 +9,8 @@ import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
 import useBuyer from "../../../hooks/useBuyer";
 import ConfirmationModal from "../../Common/Modal/ConfirmationModal/ConfirmationModal";
 import { format, parseISO } from "date-fns";
-import SellerInfo from "../../Common/SellerInfo/SellerInfo";
+import axios from "axios";
+import useVerify from "../../../hooks/useVerify";
 const CategoryCard = ({ product }) => {
   const {
     productName,
@@ -23,11 +24,15 @@ const CategoryCard = ({ product }) => {
     yearOfPurchase,
     productLocation,
     productPostedOn,
+    sellerName,
+    productCondition,
   } = product;
-
   const { user, logOut } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
+  const [isVerify] = useVerify(productPostedBy);
   const [isBuyer] = useBuyer(user?.email);
   const [currentDateMeta, setCurrentDateMeta] = useState(new Date());
+
   const productData = {
     reportBy: user?.displayName,
     reporterEmail: user?.email,
@@ -38,12 +43,13 @@ const CategoryCard = ({ product }) => {
   };
   const [report, setReport] = useState(null);
   const [bookData, setBookData] = useState(null);
+
   const closeModal = () => {
     setReport(null);
     setBookData(null);
   };
   const handleReportProduct = async (productData) => {
-    fetch("http://localhost:5000/reports", {
+    fetch("https://bookroy-book-resale-market-server.vercel.app/reports", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -58,6 +64,14 @@ const CategoryCard = ({ product }) => {
         setReport(null);
       });
   };
+  useEffect(() => {
+    axios
+      .get("https://bookroy-book-resale-market-server.vercel.app/sellers")
+      .then((data) => {
+        const users = data.data;
+        setUsers(users);
+      });
+  }, []);
   const [getBookData, setGetBookData] = useState("");
   const handleBookNow = (e) => {
     e.preventDefault();
@@ -80,7 +94,7 @@ const CategoryCard = ({ product }) => {
       paid: false,
     };
     console.log(submittedData);
-    fetch("http://localhost:5000/bookings", {
+    fetch("https://bookroy-book-resale-market-server.vercel.app/bookings", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -93,13 +107,20 @@ const CategoryCard = ({ product }) => {
         if (data.acknowledged) {
           // setAppointmentModalData(null);
           setBookData(null);
-          toast.success("Booking confirmed");
-          fetch(`http://localhost:5000/updateProduct/${bookData._id}`, {
-            method: "PUT",
-            headers: {
-              authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-            },
-          })
+          toast.success(
+            "Booking confirmed. please make payment from dashboard"
+          );
+          fetch(
+            `https://bookroy-book-resale-market-server.vercel.app/updateProduct/${bookData._id}`,
+            {
+              method: "PUT",
+              headers: {
+                authorization: `bearer ${localStorage.getItem(
+                  "bookroy-token"
+                )}`,
+              },
+            }
+          )
             .then((res) => res.json())
             .then((data) => {
               if (data.modifiedCount > 0) {
@@ -116,14 +137,6 @@ const CategoryCard = ({ product }) => {
         }
       });
   };
-  const [sellerData, setSellerData] = useState([]);
-  useEffect(() => {
-    fetch(`http://localhost:5000/sellers`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => setSellerData(data));
-  }, []);
 
   return (
     <>
@@ -135,6 +148,7 @@ const CategoryCard = ({ product }) => {
           <h2 className="card-title">
             {productName}
 
+            {sellerName}
             {isBuyer ? (
               <label
                 htmlFor="confirmation-modal"
@@ -148,39 +162,37 @@ const CategoryCard = ({ product }) => {
                 Report
               </button>
             )}
-
-            {/* <div className="tooltip" data-tip={`Sponsored by ${listedBy}`}>
-                <button className="badge badge-secondary">Ads</button>
-              </div> */}
           </h2>
+          <div className="badge badge-secondary badge-outline">
+            {productCondition}
+          </div>
           Posted on:{" "}
           {format(parseISO(product.productPostedOn), "yyyy-MM-dd' 'HH:mm")}
           <div className="card-actions justify-start">
-            {/* Seller:{sellerDetails.userName} */}
-            {/* <div className="badge p-3 font-bold">
-                {isVerified && (
-                  <div
-                    className="tooltip text-white"
-                    data-tip="This seller is verified"
+            <div className="badge p-3 font-bold">
+              {isVerify && (
+                <div
+                  className="tooltip text-white"
+                  data-tip="This seller is verified"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-6 h-6"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"
-                      />
-                    </svg>
-                  </div>
-                )}
-                {listedBy}
-              </div> */}
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"
+                    />
+                  </svg>
+                </div>
+              )}
+              {sellerName}
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-2 lg:grid-cols-4 justify-items-center">
             <div className="badge badge-secondary badge-outline">
@@ -188,7 +200,7 @@ const CategoryCard = ({ product }) => {
             </div>
 
             <div className="badge badge-outline">{productStatus}</div>
-            <div className="badge badge-secondary badge-outline">
+            <div className="ml-3 badge w-24 badge-secondary badge-outline">
               {productLocation}
             </div>
           </div>
@@ -205,19 +217,13 @@ const CategoryCard = ({ product }) => {
             </p>
           )}
           <div className="card-actions justify-start">
-            {productStatus === "sold" ? (
-              <button className="btn" disabled>
-                Already Booked
-              </button>
-            ) : (
-              <label
-                htmlFor="book-modal"
-                onClick={() => setBookData(product)}
-                className="btn"
-              >
-                Book Now
-              </label>
-            )}
+            <label
+              htmlFor="book-modal"
+              onClick={() => setBookData(product)}
+              className="btn"
+            >
+              Book Now
+            </label>
           </div>
         </div>
         {report && (

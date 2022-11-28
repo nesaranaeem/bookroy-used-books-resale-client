@@ -17,29 +17,37 @@ const Orders = () => {
     queryKey: ["bookings"],
     queryFn: async () => {
       const res = await fetch(
-        `http://localhost:5000/bookedItem?email=${user.email}`
+        `https://bookroy-book-resale-market-server.vercel.app/bookedItem?email=${user.email}`
       );
       const data = await res.json();
       return data;
     },
   });
   const handleDeleteReport = (id) => {
-    fetch(`http://localhost:5000/bookedItem?email=${user.email}`, {
-      method: "DELETE",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-      },
-    })
+    fetch(
+      `https://bookroy-book-resale-market-server.vercel.app/bookedItem?email=${user.email}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.deletedCount > 0) {
           toast.success("Deleted successful.");
-          fetch(`http://localhost:5000/deleteReport/${id}`, {
-            method: "DELETE",
-            headers: {
-              authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-            },
-          });
+          fetch(
+            `https://bookroy-book-resale-market-server.vercel.app/deleteReport/${id}`,
+            {
+              method: "DELETE",
+              headers: {
+                authorization: `bearer ${localStorage.getItem(
+                  "bookroy-token"
+                )}`,
+              },
+            }
+          );
           refetch();
         }
         refetch();

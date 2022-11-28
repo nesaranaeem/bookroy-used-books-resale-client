@@ -5,7 +5,8 @@ import axios from "axios";
 import CategoryCard from "../../Category/CategoryCard/CategoryCard";
 const AdvertisedItems = () => {
   const [promotedProducts, setPromotedProducts] = useState(null);
-  const promotedProductsURL = "http://localhost:5000/promoted-products";
+  const promotedProductsURL =
+    "https://bookroy-book-resale-market-server.vercel.app/promoted-products";
   useEffect(() => {
     axios.get(promotedProductsURL).then((response) => {
       setPromotedProducts(response.data);

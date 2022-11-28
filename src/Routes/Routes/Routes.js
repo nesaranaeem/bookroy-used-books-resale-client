@@ -1,4 +1,5 @@
 import DashboardLayout from "../../Layout/DashboardLayout";
+import Blogs from "../../Pages/Blogs/Blogs";
 import Category from "../../Pages/Category/Category";
 import ErrorPage from "../../Pages/Common/ErrorPage/ErrorPage";
 import Login from "../../Pages/Common/Login/Login";
@@ -40,14 +41,21 @@ const router = createBrowserRouter([
         element: <Login></Login>,
       },
       {
+        path: "/blog",
+        element: <Blogs></Blogs>,
+      },
+      {
         path: "/category/:id",
         element: (
           <PrivateRoute>
             <Category></Category>
           </PrivateRoute>
         ),
-        loader: ({ params }) =>
-          fetch(`http://localhost:5000/category/${params.id}`),
+        loader: async ({ params }) => {
+          return fetch(
+            `https://bookroy-book-resale-market-server.vercel.app/category/${params.id}`
+          );
+        },
       },
       {
         path: "/dashboard",
@@ -125,8 +133,11 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/payment/:id",
             element: <Payment></Payment>,
-            loader: ({ params }) =>
-              fetch(`http://localhost:5000/booking/${params.id}`),
+            loader: async ({ params }) => {
+              return fetch(
+                `https://bookroy-book-resale-market-server.vercel.app/booking/${params.id}`
+              );
+            },
           },
         ],
       },

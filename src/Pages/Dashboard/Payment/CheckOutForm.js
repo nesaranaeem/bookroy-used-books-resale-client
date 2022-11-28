@@ -1,9 +1,11 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
 
 const CheckOutForm = ({ booking }) => {
-  const { price, name, email, _id, productName } = booking;
+  const { price, name, email, _id, productName, productId } = booking;
+  const { user, logOut } = useContext(AuthContext);
   const stripe = useStripe();
   const elements = useElements();
   const [cardError, setCardError] = useState("");
@@ -13,15 +15,18 @@ const CheckOutForm = ({ booking }) => {
   const [processing, setProcessing] = useState(false);
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    fetch("http://localhost:5000/create-payment-intent", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-      },
+    fetch(
+      "https://bookroy-book-resale-market-server.vercel.app/create-payment-intent",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+        },
 
-      body: JSON.stringify({ price }),
-    })
+        body: JSON.stringify({ price }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
   }, [price, productName]);
@@ -74,7 +79,7 @@ const CheckOutForm = ({ booking }) => {
         email,
         bookingId: _id,
       };
-      fetch("http://localhost:5000/payments", {
+      fetch("https://bookroy-book-resale-market-server.vercel.app/payments", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -89,6 +94,26 @@ const CheckOutForm = ({ booking }) => {
             setCardSuccess("Payment Completed");
             setTransactionId(paymentIntent.id);
             toast.success("Payment Completed");
+            fetch(
+              `https://bookroy-book-resale-market-server.vercel.app/updateProduct/${productId}`,
+              {
+                method: "PUT",
+                headers: {
+                  authorization: `bearer ${localStorage.getItem(
+                    "bookroy-token"
+                  )}`,
+                },
+              }
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.modifiedCount > 0) {
+                  toast.success("Product booked");
+                }
+                if (data.status === 401 || data.status === 403) {
+                  return logOut();
+                }
+              });
           }
         });
     }

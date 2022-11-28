@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -17,19 +18,19 @@ const HeroSection = () => {
             </p>
 
             <div class="mt-8 flex flex-wrap justify-center gap-4">
-              <a
-                class="block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
-                href="/get-started"
+              <Link
+                to="/dashboard"
+                className="block w-full rounded border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-white focus:outline-none focus:ring active:text-opacity-75 sm:w-auto"
               >
-                Get Started
-              </a>
+                Dashboard
+              </Link>
 
-              <a
-                class="block w-full rounded border border-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring active:bg-blue-500 sm:w-auto"
-                href="/about"
+              <Link
+                to="/blog"
+                className="block w-full rounded border border-blue-600 px-12 py-3 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring active:bg-blue-500 sm:w-auto"
               >
-                Learn More
-              </a>
+                Blog
+              </Link>
             </div>
           </div>
         </div>

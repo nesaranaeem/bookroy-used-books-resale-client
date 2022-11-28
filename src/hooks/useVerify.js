@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 
-const useSeller = (email) => {
+const useVerify = (email) => {
   console.log(email);
   const [isSeller, setisSeller] = useState(false);
   const [isSellerLoading, setisSellerLoading] = useState(true);
   useEffect(() => {
     if (email) {
       fetch(
-        `https://bookroy-book-resale-market-server.vercel.app/seller/${email}`
+        `https://bookroy-book-resale-market-server.vercel.app/verify/${email}`
       )
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          setisSeller(data.isSeller);
+          setisSeller(data.isVerify);
           setisSellerLoading(false);
         });
     }
@@ -20,4 +20,4 @@ const useSeller = (email) => {
   return [isSeller, isSellerLoading];
 };
 
-export default useSeller;
+export default useVerify;

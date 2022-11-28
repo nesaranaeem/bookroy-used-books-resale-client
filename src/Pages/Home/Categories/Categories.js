@@ -27,7 +27,8 @@ const Categories = () => {
     },
   ];
   const [categories, setCategories] = useState(null);
-  const categoriesURL = "http://localhost:5000/categories";
+  const categoriesURL =
+    "https://bookroy-book-resale-market-server.vercel.app/categories";
   useEffect(() => {
     axios.get(categoriesURL).then((response) => {
       setCategories(response.data);
@@ -52,9 +53,7 @@ const Categories = () => {
             ))}
           </div>
           {featuredCategoriesData.length > 2 && (
-            <div className="grid grid-cols-1 justify-items-center">
-              <Button>View All Category</Button>
-            </div>
+            <div className="grid grid-cols-1 justify-items-center"></div>
           )}
         </div>
       </section>

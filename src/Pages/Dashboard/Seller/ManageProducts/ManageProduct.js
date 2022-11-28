@@ -5,6 +5,7 @@ import { AuthContext } from "../../../../contexts/AuthProvider/AuthProvider";
 import ConfirmationModal from "../../../Common/Modal/ConfirmationModal/ConfirmationModal";
 import { format, parseISO } from "date-fns";
 import Loader from "../../../Common/Loader/Loader";
+import { Helmet } from "react-helmet";
 const ManageProducts = () => {
   const [deletingProduct, setDeletingProduct] = useState(null);
   const [promote, setPromote] = useState(null);
@@ -14,12 +15,15 @@ const ManageProducts = () => {
     setPromote(null);
   };
   const handleDeleteProduct = (product) => {
-    fetch(`http://localhost:5000/product/${product._id}`, {
-      method: "DELETE",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-      },
-    })
+    fetch(
+      `https://bookroy-book-resale-market-server.vercel.app/product/${product._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.deletedCount > 0) {
@@ -37,7 +41,7 @@ const ManageProducts = () => {
     queryFn: async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/products/?email=${user?.email}`,
+          `https://bookroy-book-resale-market-server.vercel.app/products/?email=${user?.email}`,
           {
             headers: {
               authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
@@ -56,22 +60,33 @@ const ManageProducts = () => {
     return <Loader></Loader>;
   }
   const setPromoteProduct = (id) => {
-    fetch(`http://localhost:5000/product/${id}`, {
-      method: "PUT",
-      headers: {
-        authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
-      },
-    })
+    fetch(
+      `https://bookroy-book-resale-market-server.vercel.app/product/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          authorization: `bearer ${localStorage.getItem("bookroy-token")}`,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.modifiedCount > 0) {
-          toast.success("Product Marked As Sold");
+          toast.success("Successfully");
           refetch();
         }
       });
   };
   return (
     <div>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Manage Product - Resale Your Books</title>
+        <meta
+          name="description"
+          content="BookRoy is a platform for resale used books"
+        />
+      </Helmet>
       <h2 className="text-3xl my-4 text-center">
         Manage Products:{" "}
         {products?.length < 1 ? <>No product Yet</> : <>{products?.length}</>}

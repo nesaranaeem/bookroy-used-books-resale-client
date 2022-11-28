@@ -7,7 +7,7 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK);
 console.log(stripePromise);
 const Payment = () => {
   const booking = useLoaderData();
-  const { productName, price, name, _id } = booking;
+  const { productName, price, name, _id, productId } = booking;
   const navigation = useNavigation();
   if (navigation.state === "loading") {
     return <h2>Loading</h2>;

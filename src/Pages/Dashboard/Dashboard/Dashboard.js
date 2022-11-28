@@ -7,7 +7,9 @@ const Dashboard = () => {
   const [isAdmin] = useAdmin(user?.email);
   return (
     <div>
-      <p className="p-5 text-center">Hello, {user?.displayName}</p>
+      <p className="p-5 text-center">
+        Hello, {user?.displayName}. please use the buttons to do any actions
+      </p>
     </div>
   );
 };
