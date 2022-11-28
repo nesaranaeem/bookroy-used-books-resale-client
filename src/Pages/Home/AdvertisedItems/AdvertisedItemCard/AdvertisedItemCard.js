@@ -157,7 +157,7 @@ const CategoryCard = ({ product }) => {
           Posted on:{" "}
           {format(parseISO(product.productPostedOn), "yyyy-MM-dd' 'HH:mm")}
           <div className="card-actions justify-start">
-            Seller:{productPostedBy} {sellerInfo && <p>{sellerInfo._id}</p>}
+            Seller:{productPostedBy} {sellerInfo.userName}
             {/* <div className="badge p-3 font-bold">
                 {isVerified && (
                   <div

@@ -16,7 +16,6 @@ const AddProduct = () => {
   const navigate = useNavigate();
   const imgbbApi = process.env.REACT_APP_imgbbApi;
   const handleAddProduct = (data) => {
-    console.log(data);
     const image = data.image[0];
     const formData = new FormData();
     formData.append("image", image);

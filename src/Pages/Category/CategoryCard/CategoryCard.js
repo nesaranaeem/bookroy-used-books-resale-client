@@ -9,6 +9,7 @@ import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
 import useBuyer from "../../../hooks/useBuyer";
 import ConfirmationModal from "../../Common/Modal/ConfirmationModal/ConfirmationModal";
 import { format, parseISO } from "date-fns";
+import SellerInfo from "../../Common/SellerInfo/SellerInfo";
 const CategoryCard = ({ product }) => {
   const {
     productName,
@@ -115,15 +116,15 @@ const CategoryCard = ({ product }) => {
         }
       });
   };
-  const [sellerInfo, setSellerInfo] = useState([]);
+  const [sellerData, setSellerData] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:5000/idDetails?email=${product.productPostedBy}`)
+    fetch(`http://localhost:5000/sellers`)
       .then((res) => {
         return res.json();
       })
-      .then((data) => setSellerInfo(data));
-  }, [product]);
-  console.log(sellerInfo);
+      .then((data) => setSellerData(data));
+  }, []);
+
   return (
     <>
       <div className="card w-9/12 lg:w-96 bg-base-100 shadow-xl">
@@ -155,7 +156,7 @@ const CategoryCard = ({ product }) => {
           Posted on:{" "}
           {format(parseISO(product.productPostedOn), "yyyy-MM-dd' 'HH:mm")}
           <div className="card-actions justify-start">
-            Seller:{productPostedBy} {sellerInfo && <p>{sellerInfo._id}</p>}
+            {/* Seller:{sellerDetails.userName} */}
             {/* <div className="badge p-3 font-bold">
                 {isVerified && (
                   <div

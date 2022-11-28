@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import { async } from "@firebase/util";
+import React, { useEffect, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import CategoryCard from "./CategoryCard/CategoryCard";
-
+import axios from "axios";
 const Category = ({ productPostedBy }) => {
-  const products = useLoaderData();
+  const myProducts = useLoaderData();
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    setProducts(myProducts);
+  }, [myProducts]);
+  const [sellerData, setSellerData] = useState([]);
+  useEffect(() => {
+    fetch(`http://localhost:5000/sellers`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setSellerData(data);
+        console.log(data);
+      });
+  }, [products]);
 
   return (
     <div>
