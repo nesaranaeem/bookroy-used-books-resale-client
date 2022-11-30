@@ -14,7 +14,6 @@ const Categories = () => {
       setLoading(false);
     });
   }, [categories]);
-  if (!categories) return null;
   return (
     <>
       {loading ? (

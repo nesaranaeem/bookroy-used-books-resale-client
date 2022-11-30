@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 const useBuyer = (email) => {
-  console.log(email);
   const [isBuyer, setisBuyer] = useState(false);
   const [isBuyerLoading, setisBuyerLoading] = useState(true);
   useEffect(() => {
@@ -11,7 +10,6 @@ const useBuyer = (email) => {
       )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setisBuyer(data.isBuyer);
           setisBuyerLoading(false);
         });

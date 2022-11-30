@@ -30,7 +30,6 @@ const AddProduct = () => {
     })
       .then((res) => res.json())
       .then((imageData) => {
-        console.log(imageData);
         if (imageData.success) {
           const productData = {
             productName: data.name,
@@ -65,7 +64,7 @@ const AddProduct = () => {
           )
             .then((res) => res.json())
             .then((result) => {
-              console.log(result);
+             
               toast.success(`${data.name} is added successfully`);
               navigate("/dashboard/my-products");
             });

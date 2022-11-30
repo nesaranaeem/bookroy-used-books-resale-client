@@ -73,7 +73,6 @@ const ReportedItems = () => {
                 <th>Product Name</th>
                 <th>Reported By</th>
                 <th>Action</th>
-                <th>Reported Time</th>
               </tr>
             </thead>
             <tbody>
@@ -91,7 +90,6 @@ const ReportedItems = () => {
                       Delete Product
                     </label>
                   </td>
-                  <td>{format(parseISO(report.reportedTime), "PP")}</td>
                 </tr>
               ))}
             </tbody>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const useVerify = (email) => {
-  console.log(email);
+  
   const [isSeller, setisSeller] = useState(false);
   const [isSellerLoading, setisSellerLoading] = useState(true);
   useEffect(() => {
@@ -11,7 +11,7 @@ const useVerify = (email) => {
       )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          
           setisSeller(data.isVerify);
           setisSellerLoading(false);
         });

@@ -50,11 +50,11 @@ const CheckOutForm = ({ booking }) => {
     });
 
     if (error) {
-      console.log("[error]", error);
+      
       setCardError(error.message);
     } else {
       setCardError("");
-      console.log("[PaymentMethod]", paymentMethod);
+      
     }
     setCardSuccess("");
     setProcessing(true);
@@ -89,7 +89,7 @@ const CheckOutForm = ({ booking }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          
           if (data.insertedId) {
             setCardSuccess("Payment Completed");
             setTransactionId(paymentIntent.id);

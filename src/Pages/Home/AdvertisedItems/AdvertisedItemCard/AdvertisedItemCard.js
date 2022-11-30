@@ -56,7 +56,6 @@ const CategoryCard = ({ product }) => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         toast.success(`Report Sent Successfully`);
         setReport(null);
       });
@@ -82,7 +81,7 @@ const CategoryCard = ({ product }) => {
       productId: bookData._id,
       paid: false,
     };
-    console.log(submittedData);
+
     fetch("https://bookroy-book-resale-market-server.vercel.app/bookings", {
       method: "POST",
       headers: {
@@ -92,7 +91,6 @@ const CategoryCard = ({ product }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.acknowledged) {
           // setAppointmentModalData(null);
           setBookData(null);
@@ -114,7 +112,7 @@ const CategoryCard = ({ product }) => {
       })
       .then((data) => setSellerInfo(data));
   }, [product]);
-  console.log(sellerInfo);
+
   return (
     <>
       <div className="card w-9/12 lg:w-96 bg-base-100 shadow-xl">

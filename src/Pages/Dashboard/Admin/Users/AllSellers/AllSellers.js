@@ -55,7 +55,7 @@ const AllSellers = () => {
         }
       });
   };
-  console.log(sellers);
+ 
   return (
     <div>
       <Helmet>

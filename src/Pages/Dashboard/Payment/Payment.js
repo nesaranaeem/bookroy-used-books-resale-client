@@ -4,7 +4,7 @@ import React from "react";
 import { useLoaderData, useNavigation } from "react-router-dom";
 import CheckOutForm from "./CheckOutForm";
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK);
-console.log(stripePromise);
+
 const Payment = () => {
   const booking = useLoaderData();
   const { productName, price, name, _id, productId } = booking;

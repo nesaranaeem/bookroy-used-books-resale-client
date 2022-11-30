@@ -72,7 +72,7 @@ const SignUp = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+       
         setLoading(false);
         navigate(from, { replace: true });
       });
@@ -118,7 +118,7 @@ const SignUp = () => {
         navigate(from, { replace: true });
       })
       .catch((err) => {
-        console.log(err);
+       
         setLoading(false);
         navigate(from, { replace: true });
       });

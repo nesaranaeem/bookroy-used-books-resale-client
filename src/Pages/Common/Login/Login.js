@@ -17,12 +17,13 @@ const Login = () => {
   const [loginData, setloginData] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loginUserEmail, setLoginUserEmail] = useState("");
+  const [createdUserEmail, setCreatedUserEmail] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
   const handleLogin = (loginData) => {
     setLoginError("");
-    console.log(loginData);
+
     loginUserEmailPassword(loginData.email, loginData.password)
       .then((res) => {
         const user = res.user;
@@ -44,8 +45,22 @@ const Login = () => {
         setLoginUserEmail(loginData.email);
       })
       .catch((err) => {
-        console.log(err.message);
+      
         setLoginError(err.message);
+      });
+  };
+  const saveUser = (userName, userEmail, photoURL, userRole) => {
+    const user = { userName, userEmail, photoURL, userRole };
+    fetch("https://bookroy-book-resale-market-server.vercel.app/users", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCreatedUserEmail(userEmail);
       });
   };
   const provider = new GoogleAuthProvider();
@@ -67,21 +82,15 @@ const Login = () => {
           .then((data) => {
             localStorage.setItem("bookroy-token", data.token);
           });
-
+        saveUser(user.displayName, user.email, user.photoURL, "buyer");
         navigate(from, { replace: true });
         toast.success(`Hello, ${user.displayName}. Signup Successed`);
-        // const userData = {
-        //   userName: user.displayName,
-        //   userEmail: user?.email,
-        //   photoURL: user?.photoURL,
-        //   userRole: "buyer",
-        // };
 
         setLoading(false);
         navigate(from, { replace: true });
       })
       .catch((err) => {
-        console.log(err);
+        
         setLoading(false);
         navigate(from, { replace: true });
       });

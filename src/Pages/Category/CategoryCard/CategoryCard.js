@@ -60,7 +60,6 @@ const CategoryCard = ({ product }) => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
         toast.success(`Report Sent Successfully`);
         setReport(null);
       });
@@ -94,7 +93,7 @@ const CategoryCard = ({ product }) => {
       productId: bookData._id,
       paid: false,
     };
-    console.log(submittedData);
+
     fetch("https://bookroy-book-resale-market-server.vercel.app/bookings", {
       method: "POST",
       headers: {
@@ -104,7 +103,7 @@ const CategoryCard = ({ product }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        
         if (data.acknowledged) {
           // setAppointmentModalData(null);
           setBookData(null);
@@ -149,7 +148,6 @@ const CategoryCard = ({ product }) => {
           <h2 className="card-title">
             {productName}
 
-            {sellerName}
             {isBuyer ? (
               <label
                 htmlFor="confirmation-modal"
@@ -207,14 +205,16 @@ const CategoryCard = ({ product }) => {
           </div>
           {productDetails?.length > 90 ? (
             <p>
-              Original Price is ${buyingPrice} Year of purchase:{" "}
-              {yearOfPurchase} {productDetails.slice(0, 90)}
+              Original Price is <strong>${buyingPrice}</strong>. Year of
+              purchase: <strong>{yearOfPurchase}</strong>.{" "}
+              {productDetails.slice(0, 90)}
               ...
             </p>
           ) : (
             <p>
-              Original Price is ${buyingPrice} Year of purchase:
-              {yearOfPurchase}, {productDetails}
+              Original Price is <strong>${buyingPrice}</strong>. Year of
+              purchase:
+              <strong>{yearOfPurchase}</strong>. {productDetails}
             </p>
           )}
           <div className="card-actions justify-start">

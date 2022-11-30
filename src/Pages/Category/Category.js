@@ -1,10 +1,11 @@
 import { async } from "@firebase/util";
 import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import CategoryCard from "./CategoryCard/CategoryCard";
 import axios from "axios";
 import { LoaderIcon } from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import Loader from "../Common/Loader/Loader";
 const Category = ({ productPostedBy }) => {
   const myProducts = useLoaderData();
   const [products, setProducts] = useState([]);
@@ -13,17 +14,10 @@ const Category = ({ productPostedBy }) => {
     setProducts(myProducts);
     setLoading(false);
   }, [myProducts]);
-  const [sellerData, setSellerData] = useState([]);
-  useEffect(() => {
-    fetch(`https://bookroy-book-resale-market-server.vercel.app/sellers`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setSellerData(data);
-        setLoading(false);
-      });
-  }, [products]);
+  const navigation = useNavigate();
+  if (navigation.state === "loading") {
+    return <Loader></Loader>;
+  }
 
   return (
     <div>
