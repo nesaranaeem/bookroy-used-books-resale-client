@@ -206,9 +206,14 @@ const CategoryCard = ({ product }) => {
                 Book Now
               </label>
             ) : (
-              <button className="btn" disabled>
-                Book Now
-              </button>
+              <div
+                className="tooltip"
+                data-tip="Only Registered buyer can book"
+              >
+                <button className="btn" disabled>
+                  Book Now
+                </button>
+              </div>
             )}
           </div>
         </div>
