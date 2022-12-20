@@ -134,9 +134,14 @@ const CategoryCard = ({ product }) => {
                 Report
               </label>
             ) : (
-              <button className="btn btn-xs" disabled>
-                Report
-              </button>
+              <div
+                className="tooltip"
+                data-tip="Only Registered buyer can Report"
+              >
+                <button className="btn btn-xs" disabled>
+                  Report
+                </button>
+              </div>
             )}
 
             {/* <div className="tooltip" data-tip={`Sponsored by ${listedBy}`}>
